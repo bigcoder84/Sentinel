@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.ConfigFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +33,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class NacosConfig {
+
+    @Value("${nacos.ip}")
+    private String nacosIp;
+
 
     @Bean
     public Converter<List<FlowRuleEntity>, String> flowRuleEntityEncoder() {

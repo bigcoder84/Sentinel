@@ -16,7 +16,9 @@
 package com.alibaba.csp.sentinel.demo.datasource.nacos;
 
 import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
+import java.util.Properties;
 
 /**
  * Nacos config sender for demo.
@@ -26,20 +28,24 @@ import com.alibaba.nacos.api.config.ConfigService;
 public class NacosConfigSender {
 
     public static void main(String[] args) throws Exception {
-        final String remoteAddress = "localhost:8848";
-        final String groupId = "Sentinel_Demo";
-        final String dataId = "com.alibaba.csp.sentinel.demo.flow.rule";
+        final String groupId = "SENTINEL_GROUP";
+        final String dataId = "sentinel-demo-flow-rules";
+        // 创建ConfigService实例
+        Properties properties = new Properties();
+        properties.put(PropertyKeyConst.SERVER_ADDR, "10.10.10.12:8848");
+        // 指定namespace
+        properties.put(PropertyKeyConst.NAMESPACE, "SENTINEL");
         final String rule = "[\n"
             + "  {\n"
-            + "    \"resource\": \"TestResource\",\n"
+            + "    \"resource\": \"GET:/user/getById\",\n"
             + "    \"controlBehavior\": 0,\n"
-            + "    \"count\": 5.0,\n"
+            + "    \"count\": 1,\n"
             + "    \"grade\": 1,\n"
             + "    \"limitApp\": \"default\",\n"
             + "    \"strategy\": 0\n"
             + "  }\n"
             + "]";
-        ConfigService configService = NacosFactory.createConfigService(remoteAddress);
+        ConfigService configService = NacosFactory.createConfigService(properties);
         System.out.println(configService.publishConfig(dataId, groupId, rule));
     }
 }
